@@ -34,7 +34,7 @@ For the frequency setting and status utility:
     HID_UNIQ=0673ED0E4101
     MODALIAS=hid:b0003g0001v00001DD2p00002443
 ```
-3. Plug the hidraw device back into utility, eg
+3. Use the hidraw device as the first argument with the utility, eg
 ```
-    ./bbi-32 /dev/hidraw1 --enc11 1
+    ./bbi-32 /dev/hidraw1 --enc 11 type 1
 ```

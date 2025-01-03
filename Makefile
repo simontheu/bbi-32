@@ -1,15 +1,15 @@
 CFLAGS=-g
-LBPROGRAMS=lbe-142x
+LBPROGRAMS=bbi-32
 
 HIDLIB=-L. -lhidapi-hidraw -Wl,-rpath,.
 
-all: lbe-142x-utils
+all: bbi-32-utils
 
 libhidapi-hidraw.so:
 	ln -s libhidapi-hidraw.so.0 libhidapi-hidraw.so
 
-lbe-142x-utils: lbe-142x.c
-	gcc ${CFLAGS} -o lbe-142x lbe-142x.c -I.
+bbi-32-utils: bbi-32.c
+	gcc ${CFLAGS} -o bbi-32 bbi-32.c -I.
 
 all-clean:
 	rm ${LBPROGRAMS} libhidapi-hidraw.so

@@ -50,11 +50,8 @@ int main(int argc, char **argv)
       int fd;
       int i, j, res, desc_size = 0;
       u_int8_t buf[60];
-      uint32_t current_f;
 
       struct hidraw_devinfo info;
-
-//      GPSSettings *currentSettings = new GPSSettings;
 
    /* Open the Device with non-blocking reads. In real life,
       don't use a hard coded path; use libudev instead. 
@@ -67,7 +64,9 @@ int main(int argc, char **argv)
             printf("                represents first number of input pair\n");
             printf("        --type: 0,2,4,8 or 16 (16 valid only on last 2 pairs)\n");
             printf("                change encoder type\n");
-            printf("                0 = off, 2 = 1:1, 4 = 1:2, 8 = 1:4, 16 = Hat\n");
+            printf("                0 = off, 2 = 1:1, 4 = 1:2, 8 = 1:4, 16 = Hat\n\n\n");
+            printf("        --pulse: integer (x?-x?)\n");
+            printf("                pulse width for encoders/rotaries in ms\n");
             return -1;
       }
 
@@ -97,7 +96,7 @@ int main(int argc, char **argv)
                 printf("    Not a valid BBI-32 Device\n\n");
                   printf("    Device Info:\n");
                   printf("        vendor: 0x%04hx\n", info.vendor);
-                  printf("        product: 0x%04hx\n", info.product);
+                  printf("        product: 0x%04hx\n\n\n", info.product);
                   return -1;//Device not valid
             }
       }
@@ -132,7 +131,7 @@ int main(int argc, char **argv)
 
 	//Get CLI values as vars
 	int list = -1;
-	int enable = -1;
+	int pulse = -1;
 	int type = -1;
 	int enc = -1;
 	
@@ -145,7 +144,7 @@ int main(int argc, char **argv)
 	    encoder_settings[i] = -1;
 	}
 	
-	processCommandLineArguments(argc, argv, &enc, &list, &enable, &type);
+	processCommandLineArguments(argc, argv, &enc, &list, &pulse, &type);
       	printf("  Changes:\n");
       	int changed = 0;
       	char type_string[4];
@@ -182,10 +181,10 @@ int main(int argc, char **argv)
             if (res < 0) perror("HIDIOCSFEATURE");
             changed = 1;
 	}
-	if (enable != -1) {
+	if (pulse != -1) {
 	    buf[0] = 1;
-	    buf[1] = enable & 0x01;
-	    printf ("    Enable State :%i\n", enable);
+	    buf[1] = pulse & 0x01;
+	    printf ("    Pulse Width :%i\n", pulse);
 	    /* Set Feature */
             res = ioctl(fd, HIDIOCSFEATURE(60), buf);
             if (res < 0) perror("HIDIOCSFEATURE");
@@ -258,7 +257,7 @@ int main(int argc, char **argv)
 }
 
 
-int processCommandLineArguments(int argc, char **argv, int *enc, int *list, int *enable,int *type)
+int processCommandLineArguments(int argc, char **argv, int *enc, int *list, int *pulse,int *type)
 {
     int c;
     
@@ -305,15 +304,15 @@ int processCommandLineArguments(int argc, char **argv, int *enc, int *list, int 
                 break;
 
             case 'c'://N2_HS
-                *enable = atoi(optarg);
+                *pulse = atoi(optarg);
                 break;
                 
             case 'd'://N2_HS
-                *enable = atoi(optarg);
+                //*enable = atoi(optarg);
                 break;
                 
             case 'e'://N2_HS
-                *enable = atoi(optarg);
+                //*enable = atoi(optarg);
                 break;
 
             case '?':

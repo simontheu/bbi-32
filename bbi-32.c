@@ -62,7 +62,12 @@ int main(int argc, char **argv)
       if (argc == 1)
       {
 	    printf("Usage: bbi-32 /dev/hidraw??\n\n");
-            printf("        --list:  list current setup\n               the frequency is saved in flash\n\n");
+            printf("        --list:  list current setup\n");
+            printf("        --enc:  odd integer 1-31\n");
+            printf("                represents first number of input pair\n");
+            printf("        --type: 0,2,4,8 or 16 (16 valid only on last 2 pairs)\n");
+            printf("                change encoder type\n");
+            printf("                0 = off, 2 = 1:1, 4 = 1:2, 8 = 1:4, 16 = Hat\n");
             return -1;
       }
 
@@ -72,7 +77,7 @@ int main(int argc, char **argv)
 
       if (fd < 0) 
       {
-            perror("    Unable to open device");
+            perror("    Unable to open device\n");
             return 1;
       }
 
@@ -114,27 +119,7 @@ int main(int argc, char **argv)
       if (res < 0) {
             perror("HIDIOCGFEATURE");
       } else {
-	      printf("  Status:\n");
-            //currentSettings->setParamsFromReadBuffer(buf,res);
-            if (buf[0] == 0) {
-		    if ((buf[1] & 0x15) == 0x15) {
-		    	printf("    Device OK");
-		    } else {
-		    	/*if ((buf[1] & GPS_LOCK_BIT) != GPS_LOCK_BIT) {
-		    		printf("\n    No GPS lock\n");	
-		    	}
-		    	if ((buf[1] & ANT_OK_BIT) != ANT_OK_BIT) {
-		    		printf("\n    GPS antenna short circuit\n");	
-		    	}
-		    	if ((buf[1] & OUT1_EN_BIT) != OUT1_EN_BIT) {
-		    		printf("\n    GPS antenna short circuit\n");	
-		    	}*/
-		    }
-		    current_f = (buf[5] << 24) + (buf[4] << 16) + (buf[3] << 8) + buf[2];
-	            printf("\n    Current Frequency: %i\n", current_f);
-            }
-
-            printf("\n");
+	    
       }
 
       /* Get Raw Name */

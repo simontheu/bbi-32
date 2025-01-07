@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 	    if ((buf[2] & 0x01) != 0) {
 	        perror("Invalid encoder type value");
 	    }
-	    buf[3] = 
+	    buf[3] = type;
 	    /* Set Feature */
             res = ioctl(fd, HIDIOCSFEATURE(60), buf);
             if (res < 0) perror("HIDIOCSFEATURE");
